@@ -1,0 +1,80 @@
+
+// On Start Code
+let player = game.createSprite(2, 4)
+game.setScore(0)
+
+//inputs
+input.onButtonPressed(Button.A, function () {
+    player.setDirection(-90)
+    player.move(1)
+})
+input.onButtonPressed(Button.B, function () {
+    player.setDirection(90)
+    player.move(1)
+})
+
+//forever function
+basic.forever(function () {
+    
+    let bullet1 = game.createSprite(0, 0)
+    let bullet2 = game.createSprite(1, 0)
+    let bullet3 = game.createSprite(2, 0)
+    let bullet4 = game.createSprite(3, 0)
+    let bullet5 = game.createSprite(4, 0)
+
+    let bulletList = [bullet1, bullet2, bullet3, bullet4, bullet5]
+
+    let hole = randint(0, 4)
+
+    for(let i = 0; i < 5; i++) {
+        if(bulletList[i].get(LedSpriteProperty.X) == hole) {
+            bulletList[i].delete()
+            break;
+        }
+    }
+
+    let speed = 0
+
+    if(game.score() >= 14) {
+        speed = 210
+    }
+    else {
+        speed = game.score() * 15
+    }
+
+    while(bullet1.get(LedSpriteProperty.Y) != 4) {
+        pause(500 - speed)
+        bullet1.setDirection(180)
+        bullet1.move(1)
+        bullet2.setDirection(180)
+        bullet2.move(1)
+        bullet3.setDirection(180)
+        bullet3.move(1)
+        bullet4.setDirection(180)
+        bullet4.move(1)
+        bullet5.setDirection(180)
+        bullet5.move(1)
+        if(bullet1.get(LedSpriteProperty.Y) == 4) {
+
+            for (let i = 0; i < 5; i++) {
+                if (player.isTouching(bulletList[i])) {
+                    game.gameOver()
+                    break
+                }
+            }
+
+            pause(500)
+  
+        }
+    }
+
+
+    bullet1.delete()
+    bullet2.delete()
+    bullet3.delete()
+    bullet4.delete()
+    bullet5.delete()
+
+    game.addScore(1)
+
+})
